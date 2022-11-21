@@ -21,11 +21,20 @@ const prepareDOMElements = () => {
 	errorInfo = document.querySelector('.error-info')
 	addBtn = document.querySelector('.btn-add')
 	ulList = document.querySelector('.todolist ul')
+
+	popup = document.querySelector('.popup')
+	popupInfo = document.querySelector('.popup-info')
+	popupInput = document.querySelector('.popup-input')
+	popupAddBtn = document.querySelector('.accept')
+	popupCloseBtn = document.querySelector('.cancel')
 }
 
 const prepareDOMEvents = () => {
 	addBtn.addEventListener('click', addNewTask)
 	ulList.addEventListener('click', checkTools)
+	popupCloseBtn.addEventListener('click', closeEditBtn)
+	popupAddBtn.addEventListener('click', acceptEditBtn)
+	todoInput.addEventListener('keyup', enterKeyCheck)
 }
 
 const addNewTask = () => {
@@ -68,9 +77,38 @@ const checkTools = e => {
 		e.target.closest('li').classList.toggle('completed')
 		e.target.classList.toggle('completed')
 	} else if (e.target.matches('.edit')) {
-		e.target.closest('li')
+		editTool(e)
 	} else if (e.target.matches('.delete')) {
-		e.target.closest('li').style.display = 'none'
+		e.target.closest('li').remove()
+		if (ulList.querySelectorAll('li').length === 0) {
+			errorInfo.textContent = 'Brak zadań na liście.'
+		}
+	}
+}
+
+const editTool = e => {
+	todoToEdit = e.target.closest('li')
+	popupInput.value = todoToEdit.firstChild.textContent
+	popup.style.display = 'flex'
+}
+
+const closeEditBtn = () => {
+	popup.style.display = 'none'
+}
+
+const acceptEditBtn = e => {
+	if (popupInput.value !== '') {
+		todoToEdit.firstChild.textContent = popupInput.value
+		popup.style.display = 'none'
+		popupInfo.textContent = ''
+	} else {
+		popupInfo.textContent = 'Musisz podać jakąś treść!'
+	}
+}
+
+const enterKeyCheck = e => {
+	if (e.key === 'Enter') {
+		addNewTask()
 	}
 }
 
