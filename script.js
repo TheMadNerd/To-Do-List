@@ -4,6 +4,13 @@ let addBtn
 let ulList
 let newTodos
 
+let popup
+let popupInfo
+let todoToEdit
+let popupInput
+let popupAddBtn
+let popupCloseBtn
+
 const main = () => {
 	prepareDOMElements()
 	prepareDOMEvents()
@@ -18,6 +25,7 @@ const prepareDOMElements = () => {
 
 const prepareDOMEvents = () => {
 	addBtn.addEventListener('click', addNewTask)
+	ulList.addEventListener('click', checkTools)
 }
 
 const addNewTask = () => {
@@ -53,6 +61,17 @@ const createToolsArea = () => {
 	deleteBtn.innerHTML = '<i class="fas fa-times"></i>'
 
 	newTools.append(completeBtn, editBtn, deleteBtn)
+}
+
+const checkTools = e => {
+	if (e.target.matches('.complete')) {
+		e.target.closest('li').classList.toggle('completed')
+		e.target.classList.toggle('completed')
+	} else if (e.target.matches('.edit')) {
+		e.target.closest('li')
+	} else if (e.target.matches('.delete')) {
+		e.target.closest('li').style.display = 'none'
+	}
 }
 
 document.addEventListener('DOMContentLoaded', main)
